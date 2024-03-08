@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableHeader,
@@ -6,10 +5,10 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Link,
   Chip,
   Spinner,
 } from "@nextui-org/react";
+import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import formatCurrency from "../utils/formatCurrency.js";
 
@@ -25,7 +24,7 @@ const OrdersTable = () => {
       {loading && <Spinner label="Cargando..." color="primary" />}
       {error && <p>Error: {error.message}</p>}
       {orders && (
-        <Table aria-label="Tabla de órdenes de compra">
+        <Table aria-label="Tabla de órdenes de compra" className="mb-12">
           <TableHeader>
             <TableColumn># ORDEN</TableColumn>
             <TableColumn>TOTAL</TableColumn>
@@ -36,10 +35,20 @@ const OrdersTable = () => {
               const totalAmount = formatCurrency(order.totals.total);
               const status =
                 order.payment.status == "paid" ? "Pagada" : "Pendiente";
+              const orderState = {
+                orderNumber: order.number,
+                items: order.items,
+              };
               return (
                 <TableRow key={order.id}>
                   <TableCell>
-                    <Link href="#">#{order.number}</Link>
+                    <Link
+                      to={`/order/${order.number}`}
+                      state={orderState}
+                      className="text-cyan-500"
+                    >
+                      #{order.number}
+                    </Link>
                   </TableCell>
                   <TableCell>{totalAmount}</TableCell>
                   <TableCell>

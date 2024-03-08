@@ -6,39 +6,54 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Link,
+  Chip,
+  Spinner,
 } from "@nextui-org/react";
+import useFetch from "../hooks/useFetch";
+import formatCurrency from "../utils/formatCurrency.js";
 
 const OrdersTable = () => {
+  const apiUrl = "https://eshop-deve.herokuapp.com/api/v2/orders";
+  const authToken = import.meta.env.VITE_AUTH_TOKEN;
+
+  const { data, error, loading } = useFetch(apiUrl, authToken);
+  const orders = data?.orders;
+
   return (
-    <Table aria-label="Example static collection table">
-      <TableHeader>
-        <TableColumn>NAME</TableColumn>
-        <TableColumn>ROLE</TableColumn>
-        <TableColumn>STATUS</TableColumn>
-      </TableHeader>
-      <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>Paused</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>William Howard</TableCell>
-          <TableCell>Community Manager</TableCell>
-          <TableCell>Vacation</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <>
+      {loading && <Spinner label="Cargando..." color="primary" />}
+      {error && <p>Error: {error.message}</p>}
+      {orders && (
+        <Table aria-label="Tabla de órdenes de compra">
+          <TableHeader>
+            <TableColumn># ORDEN</TableColumn>
+            <TableColumn>TOTAL</TableColumn>
+            <TableColumn>ESTATUS</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {orders?.map((order) => {
+              const totalAmount = formatCurrency(order.totals.total);
+              const status =
+                order.payment.status == "paid" ? "Pagada" : "Pendiente";
+              return (
+                <TableRow key={order.id}>
+                  <TableCell>
+                    <Link href="#">#{order.number}</Link>
+                  </TableCell>
+                  <TableCell>{totalAmount}</TableCell>
+                  <TableCell>
+                    <Chip color="success">
+                      <span className="text-emerald-50">{status}</span>
+                    </Chip>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </>
   );
 };
 

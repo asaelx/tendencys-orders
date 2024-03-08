@@ -16,7 +16,7 @@ const Navigation = () => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+          <Link href="/" aria-current="page">
             Órdenes
           </Link>
         </NavbarItem>

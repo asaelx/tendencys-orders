@@ -45,7 +45,7 @@ const OrdersTable = () => {
                     <Link
                       to={`/order/${order.number}`}
                       state={orderState}
-                      className="text-cyan-500"
+                      className="text-blue-600"
                     >
                       #{order.number}
                     </Link>

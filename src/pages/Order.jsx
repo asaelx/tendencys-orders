@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { Divider } from "@nextui-org/react";
 import { useLocation } from "react-router-dom";
@@ -31,6 +32,9 @@ const Order = () => {
         <Navigation />
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-semibold mt-8 mb-0">{`Detalle de la orden #${orderNumber}`}</h1>
+          <Link to="/" className="text-blue-600">
+            Regresar a las órdenes
+          </Link>
         </div>
         <Divider className="my-4" />
         <ItemsTable items={items} />
